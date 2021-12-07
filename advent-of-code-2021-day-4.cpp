@@ -100,52 +100,61 @@ pair<vector<vector<int>>,int> solve(vector<vector<vector<int>>> boards, vector<i
 		}
 	}
 
-	// rep(i,winner.size())
-	// {
-	// 	rep(j,winner[i].size())
-	// 	{
-	// 		cout<<winner[i][j]<<" ";
-	// 	}
-	// 	cout<<endl;
-	// }
-	// int q=0;
-	// int p=0;
-	// int count=0;
-	// bool win=false;
-	// 	rep(i,board.size())
-	// 	{
-	// 		rep(j,board[i].size())
-	// 		{
-	// 			if(board[i][j]==-1&&i%5!=0)
-	// 			{
-	// 				while(board[i][q++]==-1)
-	// 				{
-	// 					count++;
-	// 					if(count==5)
-	// 					{
-	// 						win=true;
-	// 						break;
-	// 					}
-	// 				}
-	// 			}
-	// 			if(board[i][j]==-1&&i%5==0)
-	// 			{
-	// 				while(board[p++][j]==-1)
-	// 				{
-	// 					count++;
-	// 					if(count==5)
-	// 					{
-	// 						win=true;
-	// 						break;
-
-	// 					}
-	// 				}
-	// 			}
-	// 		}
-	// 	}
-	// 	printb(board);
 }
+pair<vector<vector<int>>,pair<int,int>> solve2(vector<vector<int>> board, vector<int> in)
+{
+	vector<vector<int>> winner;
+	int winningnum=0;
+	int row=0;
+	int col=0;
+	int count=0;
+	rep(x,in.size())
+	{
+		rep(i,board.size())
+		{
+			count=0;		
+			rep(j,board[i].size())
+			{
+				// cout<<board[i][j]<<" "; 
+				
+					if(board[i][j]==in[x])
+						board[i][j]=-1;
+					if(board[i][j]==-1)
+					{
+						while(board[i][col]==-1)
+						{
+							col++;
+							if(col==5)
+							{
+								winner=board;
+								winningnum=in[x];
+								count=x;
+								return {winner,{in[x],count}};
+							}
+						}
+						col=0;row=0;
+						while(board[row][j]==-1)
+						{
+							row++;
 
+							if(row==5)
+							{
+								winner=board;
+								winningnum=in[x];
+								count=x;
+								return {winner,{in[x],count}};
+
+							}
+							
+						}
+						col=0;row=0;
+					}
+
+				}
+			}	
+		}
+	return {winner,{in[0],count}};
+}
 int board_sum_unmarked(vector<vector<int>> board)
 {
 	int sum=0;
@@ -195,12 +204,37 @@ int main()
 		}
 		board[i][j++]=n;
 	}
+
 	boards.push_back(board);
-	pair<vector<vector<int>>,int> winner;
-	winner = solve(boards,in);
-	int number_called=winner.second;
-	int sum_unmarked =  board_sum_unmarked(winner.first);
+	int lastNum = in.back();
+
+	pair<vector<vector<int>>,pair<int,int>> winner;
+	vector<vector<int>> winnerboard;
+
+	int bestCount=0;
+	rep(i,boards.size())
+	{
+		winner = solve2(boards[i],in);
+		// printb(winner.first);
+		// cout<<winner.second.first<<" "<<winner.second.second<<"\n";
+		if(winner.second.second>bestCount)
+		{
+			winnerboard=winner.first;
+			lastNum=winner.second.first;
+		}
+		bestCount=max(bestCount,winner.second.second);
+		
+	}
+	// printb(winnerboard);
+	int sum_unmarked = board_sum_unmarked(winnerboard);
+	cout<<sum_unmarked<<" "<<lastNum<<" ";
+	int ans = sum_unmarked*lastNum;
+	cout<<ans<<endl;
+	// pair<vector<vector<int>>,int> winner;
+	// winner = solve1(boards,in);
+	// // int number_called=winner.second;
+	// // int sum_unmarked =  board_sum_unmarked(winner.first);
 	// printb(winner.first);
-	int ans = sum_unmarked*number_called;
-	cout<<ans;
+	// // int ans = sum_unmarked*number_called;
+	// // cout<<ans;
 }
