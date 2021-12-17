@@ -105,11 +105,87 @@ void solve(    vector< pair< pair<int,int>, pair<int, int>> > start
             plane[y1][x1]++;
         }
     }
+    printPlane(plane);
+    count=countDanger(plane);
+    cout<<count<<endl;
+}
+void solve2(    vector< pair< pair<int,int>, pair<int, int>> > start
+    ,vector<pair<int,int>> end,int n,int row,int col)
+{
+    vector<vector<int>> plane(row+1,vector<int>(col+1,0));
+    // plane.resize(row+1);
+    // printPlane();
+    int count=0;
+    rep(i,n)
+    {
+        // plane[i].resize(col+1);
+        // cout<<start[i].first.first<<" "<<start[i].first.second<<" -> ";
+        // cout<<start[i].second.first<<" "<<start[i].second.second<<"\n";
+        int x1=start[i].first.first;
+        int x2=start[i].second.first;
+        int y1=start[i].first.second;
+        int y2=start[i].second.second;
+        cout<<x1<<" "<<y1<<"->"<<x2<<" "<<y2<<endl;
+
+
+        if(x1==x2)
+        {
+            if(y1>y2)
+            {
+                while(y2!=(y1+1))
+                    plane[y2++][x2]++;
+            }
+            else if(y2>y1)
+            {
+                while(y1!=(y2+1))
+                    plane[y1++][x2]++;
+            }
+        }
+        else if(y1==y2)
+        {
+            if(x1>x2)
+            {
+                while(x2!=(x1+1))
+                    plane[y2][x2++]++;
+            }
+            else if(x2>x1)
+            {
+                while(x1!=(x2+1))
+                    plane[y2][x1++]++;
+            }
+
+        }
+        else if(x1==x2&&y1==y2)
+        {
+            plane[y1][x1]++;
+        }
+        else
+        {
+                if(y1>y2&&x1>x2){
+                    while((y1+1)!=y2&&(x1+1)!=x2)
+                        plane[y2++][x2++]++;
+                }
+                else if(y2>y1&&x2>x1)
+                {
+                    while((y2+1)!=y1&&(x2+1)!=x1)
+                        plane[y1++][x1++]++;
+                }
+                else if(x1>x2&&y2>y1)
+                {
+                    while(x2!=(x1+1)&&(y2!=y1-1))
+                        plane[y2--][x2++]++;
+                }
+                else if(x2>x1&&y1>y2)
+                {
+                    while(x1!=(x2+1)&&y1!=(y2-1))
+                        plane[y1--][x1++]++;
+                }
+        }
+    }
     // printPlane(plane);
     count=countDanger(plane);
     cout<<count<<endl;
 }
-
 int main()
 {
     init_code();
@@ -134,6 +210,6 @@ int main()
     // sort(end.begin(), end.end());
     int n=start.size();
     // cout<<"rows"<<row<<" cols"<<col;
-    solve(start,end,n,row,col);
+    solve2(start,end,n,row,col);
 
 }
