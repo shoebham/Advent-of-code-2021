@@ -23,19 +23,34 @@ void init_code(){
 #endif
     
 }
-
-void solve(vector<int> arr, int days)
+void solve2(vector<ll> arr, ll days)
 {
-	int size=arr.size();
-	int sum=0;
+	vector<ll> fish(10,0);
+	rep(i,arr.size())
+	{
+		fish[arr[i]]++;
+	}
+	ll countzero=0;
+	for(int i=0;i<days;i++)
+	{
+		fish[(i+7)%9]+=fish[i%9];
+	}
+	ll sum=0;
+	for(auto x:fish)sum+=x;
+		cout<<sum;
+}
+void solve(vector<ll> arr, ll days)
+{
+	ll size=arr.size();
+	ll sum=0;
 	// cout<<"Day "<<0<<": ";
  //    for(auto x:arr)cout<<x<<",";
  //    cout<<endl;
-    for(int i=1;i<=days;i++)
+    for(ll i=1;i<=days;i++)
     {
 		// cout<<"Day "<<i<<": ";
     	size=arr.size();
-    	for(int j=0;j<size;j++)
+    	for(ll j=0;j<size;j++)
     	{
     		if(arr[j]==0)
     		{
@@ -58,8 +73,8 @@ int main()
     init_code();
   	string del;
   	string in;
-  	int n;
-  	vector<int> arr;
+  	ll n;
+  	vector<ll> arr;
   	cin>>in;
   	stringstream ss(in);
   	while(ss>>n)
@@ -68,7 +83,7 @@ int main()
   		if(ss.peek()==',')
   			ss.ignore();
   	}
-  	int days=80;
-  	solve(arr,days);
+  	ll days=256;
+  	solve2(arr,days);
     return 0;
 }
